@@ -425,3 +425,10 @@ a{color:inherit;text-decoration:none}
 .v-empty{display:flex;flex-direction:column;align-items:center;gap:10px;padding:48px 0;color:var(--mut)}
 .v-empty[hidden]{display:none}
 .v-empty .v-ic{width:36px;height:36px;color:var(--c5)}
+
+/* halo de couleur selon l'état de l'appel : l'Expert parle = violet, il écoute (je parle) = vert, il réfléchit = bleu, reconnexion = corail */
+.v-bg{transition:box-shadow .45s ease}
+[data-halo="parle"] .v-bg{box-shadow:0 0 0 6px rgba(141,104,250,.55),0 0 0 20px rgba(141,104,250,.18),0 0 70px 24px rgba(141,104,250,.35),0 20px 60px rgba(0,0,0,.4)}
+[data-halo="ecoute"] .v-bg{box-shadow:0 0 0 6px rgba(46,199,128,.55),0 0 0 20px rgba(46,199,128,.16),0 0 70px 24px rgba(46,199,128,.28),0 20px 60px rgba(0,0,0,.4)}
+[data-halo="reflechit"] .v-bg{box-shadow:0 0 0 6px rgba(78,120,255,.55),0 0 0 20px rgba(78,120,255,.18),0 0 70px 24px rgba(78,120,255,.35),0 20px 60px rgba(0,0,0,.4)}
+[data-halo="reco"] .v-bg{box-shadow:inset 0 0 0 400px rgba(20,14,44,.55),0 0 0 6px rgba(228,118,90,.55),0 0 0 20px rgba(228,118,90,.16),0 0 70px 24px rgba(228,118,90,.3),0 20px 60px rgba(0,0,0,.4)}

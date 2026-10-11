@@ -28,7 +28,7 @@ var X={
    'Trois réclamations, toutes sur des retards de livraison à Yopougon. Je prépare les réponses ?','Oui, prépare-les.',
    'Réponses aux trois réclamations','C’est lancé, vous les validez avant envoi.',
    ['Trois réclamations ce matin, toutes à Yopougon.','Cause : retards du transporteur.','Réponses préparées, à valider.'],["Réponses envoyées après validation d’Aïcha."],["Aïcha valide les trois réponses.", "Awa signale les retards au transporteur."]]},
- mamadou:{n:'Mamadou',f:0,off:1,s:['Bonjour Aïcha, je vous écoute.','Comment se présente la trésorerie ?','Trésorerie à 13 semaines',
+ mamadou:{n:'Mamadou',f:0,s:['Bonjour Aïcha, je vous écoute.','Comment se présente la trésorerie ?','Trésorerie à 13 semaines',
    'Un creux est attendu fin novembre. Trois clients ont des factures en retard. Je prépare les relances ?','Oui, en Excel.',
    'Relances clients, Excel','C’est lancé, vous l’aurez dans dix minutes.',
    ['Creux de trésorerie attendu fin novembre.','Trois clients avec des factures en retard.','Relances demandées en Excel.'],["Priorité aux trois factures en retard."],["Mamadou envoie la liste des relances en Excel.", "Point trésorerie avec Aïcha vendredi."]]}
@@ -73,7 +73,6 @@ if(page==='experts'){
   if(location.hash==='#encours'){$('#v-live').hidden=false;var t0=192;setInterval(function(){$('#v-live-t').textContent=fmt(++t0)},1000)}
   if(location.hash==='#reseau'){$('#v-net').hidden=false}
   if(location.hash==='#menu'){$('#v-ph').classList.add('v-open')}
-  if(location.hash==='#pause'){sheet('mamadou')}
   if(location.hash==='#equipe12'){$$('.v-more').forEach(function(e){e.hidden=false});$('#v-search').hidden=false}
   var sq=$('#v-search input');sq.addEventListener('input',function(){var q=sq.value.trim().toLowerCase();
     $$('.v-ex').forEach(function(e){if(location.hash!=='#equipe12'&&e.classList.contains('v-more'))return;e.hidden=q&&e.textContent.toLowerCase().indexOf(q)<0})});
@@ -88,7 +87,7 @@ if(page==='appel'){
   $('#v-fail-h').textContent=E.n+' injoignable';
   var S=E.s,sec=0,timer=setInterval(function(){$('#v-time').textContent=fmt(++sec)},1000);
   var wave=$('#v-wave'),sub=$('#v-sub'),longue=false,finir=false;
-  function state(k){document.body.classList.toggle('v-s-parle-on',k==='parle');['parle','ecoute','reflechit'].forEach(function(c){wave.classList.remove('v-s-'+c)});wave.classList.add('v-s-'+k);var th=k==='reflechit';$('#v-think').classList.toggle('v-on',th);$('#v-thk').hidden=!th}
+  function state(k){document.body.classList.toggle('v-s-parle-on',k==='parle');document.body.setAttribute('data-halo',k);['parle','ecoute','reflechit'].forEach(function(c){wave.classList.remove('v-s-'+c)});wave.classList.add('v-s-'+k);var th=k==='reflechit';$('#v-think').classList.toggle('v-on',th);$('#v-thk').hidden=!th}
   var hist=[];
   function say(who,t){if(!t){return}hist.push([who,t]);hist=hist.slice(-3);
     sub.innerHTML=hist.map(function(h,k){return '<span class="v-l'+(h[0]==='u'?' v-u':'')+(k<hist.length-1?' v-old':'')+'">'+h[1]+'</span>'}).join('')}
@@ -118,8 +117,8 @@ if(page==='appel'){
   $('#v-retry').addEventListener('click',function(){$('#v-fail').hidden=true;clearInterval(timer);sec=0;timer=setInterval(function(){$('#v-time').textContent=fmt(++sec)},1000);go(0);play()});
   $('#v-write').addEventListener('click',function(){toast('Ouvre le topic de '+E.n+' dans Telegram.')});
   var h=location.hash.slice(1), at={decroche:0,ecoute:1,recherche:2,reponse:3,tache:5}[h];
-  function reco(){$('#v-reco').hidden=false;$('#v-bg').style.filter='grayscale(.7) brightness(.6)';wave.style.visibility='hidden';
-    setTimeout(function(){$('#v-reco').hidden=true;$('#v-bg').style.filter='';wave.style.visibility='';var c=$('#v-ctx');c.style.opacity=1;$('span',c).textContent='Reprise où vous en étiez';state('ecoute')},3000)}
+  function reco(){$('#v-reco').hidden=false;document.body.setAttribute('data-halo','reco');wave.style.visibility='hidden';
+    setTimeout(function(){$('#v-reco').hidden=true;wave.style.visibility='';var c=$('#v-ctx');c.style.opacity=1;$('span',c).textContent='Reprise où vous en étiez';state('ecoute')},3000)}
   if(h==='reconnexion'){go(3);sec=52;reco()}
   else if(h==='injoignable'){go(0);$('#v-fail').hidden=false;clearInterval(timer)}
   else if(h==='finir'){go(3);sec=74;$('#v-finir').click()}
