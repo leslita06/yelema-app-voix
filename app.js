@@ -79,6 +79,7 @@ if(page==='experts'){
     $$('.v-ex').forEach(function(e){if(location.hash!=='#equipe12'&&e.classList.contains('v-more'))return;e.hidden=q&&e.textContent.toLowerCase().indexOf(q)<0})});
 }
 
+if(page==='verrouille'&&location.hash==='#livrable'){$('#v-nliv').hidden=false;$('#v-ncall').hidden=true}
 if(page==='verrouille'){var t1=192;setInterval(function(){$('#v-lt').textContent=fmt(++t1)},1000)}
 
 if(page==='appel'){
@@ -111,11 +112,14 @@ if(page==='appel'){
     toast(finir?E.n+' attend que vous ayez fini.':E.n+' peut reprendre la parole.')});
   $('#v-mic').addEventListener('click',function(){var on=this.classList.toggle('v-on');$('.v-m1',this).hidden=on;$('.v-m2',this).hidden=!on;toast(on?'Micro coupé.':'Micro rétabli.')});
   $('#v-cc').addEventListener('click',function(){var on=this.classList.toggle('v-on');sub.style.visibility=on?'':'hidden'});
-  $('#v-hp').addEventListener('click',function(){var on=this.classList.toggle('v-on');toast(on?'Haut-parleur.':'Écouteur.')});
+  $('#v-hp').addEventListener('click',function(){var on=this.classList.toggle('v-on');toast(on?'Haut-parleur.':'Écouteur. Le téléphone bascule seul selon qu’il est à l’oreille.')});
   $('#v-retry').addEventListener('click',function(){$('#v-fail').hidden=true;clearInterval(timer);sec=0;timer=setInterval(function(){$('#v-time').textContent=fmt(++sec)},1000);go(0);play()});
   $('#v-write').addEventListener('click',function(){toast('Ouvre le topic de '+E.n+' dans Telegram.')});
   var h=location.hash.slice(1), at={decroche:0,ecoute:1,recherche:2,reponse:3,tache:5}[h];
-  if(h==='injoignable'){go(0);$('#v-fail').hidden=false;clearInterval(timer)}
+  function reco(){$('#v-reco').hidden=false;$('#v-bg').style.filter='grayscale(.7) brightness(.6)';wave.style.visibility='hidden';
+    setTimeout(function(){$('#v-reco').hidden=true;$('#v-bg').style.filter='';wave.style.visibility='';var c=$('#v-ctx');c.style.opacity=1;$('span',c).textContent='Reprise où vous en étiez';state('ecoute')},3000)}
+  if(h==='reconnexion'){go(3);sec=52;reco()}
+  else if(h==='injoignable'){go(0);$('#v-fail').hidden=false;clearInterval(timer)}
   else if(h==='finir'){go(3);sec=74;$('#v-finir').click()}
   else if(h==='longue'){go(2);sec=96;$('#v-long').click()}
   else if(at!==undefined){go(at);sec=[1,9,21,38,0,62][at]}

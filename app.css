@@ -287,3 +287,38 @@ a{color:inherit;text-decoration:none}
 .v-hello .v-mot.v-tr{width:80px;right:-40px;opacity:.7}
 .v-per button{min-height:44px;height:44px}
 .v-ctx{background:rgba(255,255,255,.18);color:#fff;font-weight:600}.v-ctx .v-ic{width:16px;height:16px}
+
+/* E : favori */
+.v-fav{display:flex;align-items:center;gap:14px;padding:14px;margin:4px 0 12px;border-radius:22px;background:var(--pale);cursor:pointer;position:relative;z-index:1}
+.v-fav > img{width:72px;height:72px;border-radius:50%;object-fit:cover;object-position:50% 14%}
+.v-fav div{flex:1;min-width:0}
+.v-fav b{display:block;font-family:var(--fh);font-size:21px;font-weight:700}
+.v-fav small{color:var(--mut);font-size:14px}
+.v-star{display:block;color:var(--violet);height:18px}.v-star .v-ic{width:16px;height:16px;fill:var(--violet)}
+.v-favgo{width:56px;height:56px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;flex:none;box-shadow:0 6px 16px rgba(31,157,99,.3)}
+/* A : reconnexion */
+.v-reco{position:absolute;left:50%;top:96px;transform:translateX(-50%);z-index:6;display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:999px;background:#fff;color:var(--ink);font-size:15px;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.v-reco b{font-weight:600}
+.v-spin{width:18px;height:18px;border-radius:50%;border:2.5px solid var(--pale);border-top-color:var(--violet);animation:v-spin .8s linear infinite}
+/* D : notification livrable */
+.v-notif + .v-notif{margin-top:10px}
+.v-notif .v-n3 .v-o img{width:18px;height:18px}
+.v-notif .v-n2 span{display:block}
+/* F : écran d'accueil du téléphone */
+.v-home{flex:1;display:flex;flex-direction:column;padding:40px 22px 26px;background:radial-gradient(120% 70% at 20% 0%,#4a2a9a 0%,#1d1442 60%)}
+.v-hclock{font-family:var(--fh);font-size:56px;font-weight:600;line-height:1;margin-bottom:auto}
+.v-hclock small{display:block;font-family:var(--fu);font-size:15px;font-weight:400;opacity:.8;margin-top:8px}
+.v-grid{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:22px 0;justify-items:center;margin:0 0 28px}
+.v-app{width:60px;height:60px;border-radius:18px;display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer}
+.v-app .v-ic{width:26px;height:26px}
+.v-app.v-yl{background:#fff;box-shadow:0 0 0 4px rgba(197,196,255,.6)}
+.v-app.v-yl img{width:38px;height:38px}
+.v-pop{position:absolute;right:0;bottom:84px;width:230px;background:#fff;color:var(--ink);border-radius:22px;padding:6px;box-shadow:0 16px 40px rgba(0,0,0,.35);z-index:3}
+.v-pop a{display:flex;align-items:center;gap:12px;min-height:52px;padding:0 10px;border-radius:14px;font-weight:600;font-size:15px}
+.v-pop a:active{background:var(--soft)}
+.v-pop img{width:36px;height:36px;border-radius:50%;object-fit:cover;object-position:50% 14%}
+.v-dock{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:13px}
+.v-pinned{position:relative;display:block}
+.v-pinned > img{width:62px;height:62px;border-radius:50%;object-fit:cover;object-position:50% 14%;border:2px solid #fff}
+.v-pinned i{position:absolute;right:-4px;bottom:-2px;width:24px;height:24px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center}
+.v-pinned i img{width:16px;height:16px}
