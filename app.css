@@ -335,3 +335,76 @@ a{color:inherit;text-decoration:none}
 .v-ctx .v-mot{position:static;width:14px;height:14px;color:#fff}
 .v-btn .v-mot{position:static;width:18px;height:18px;color:#fff}
 .v-callui{z-index:3}.v-bg{z-index:0}
+
+/* couleurs officielles des motifs (Branding Advanced p. 29) : astérisque #6250E4, flèche et barres #8D68FA, sur fond clair */
+:root{--ast:#6250E4;--blue:#2E4EC4;--coral:#E4765A}
+.v-m-login,.v-m-fav{color:var(--ast);opacity:1}
+.v-m-oubli,.v-m-pin,.v-m-fin{color:var(--lav);opacity:1}
+.v-m-fav{width:150px;height:150px;right:-40px;top:-36px;opacity:.9}
+/* code couleur des états : réfléchit = bleu, pause = corail */
+.v-think{background:radial-gradient(70% 55% at 50% 45%,rgba(20,14,44,.25) 30%,rgba(46,78,196,.8) 100%)}
+.v-think::before{background:conic-gradient(from 0deg,transparent 0 55%,rgba(120,150,255,.95) 80%,#fff 88%,transparent 100%)}
+.v-thk{color:#9DB3FF}
+.v-s-reflechit .v-wave i{background:#9DB3FF}
+.v-av2 i.v-off{background:var(--coral)}
+.v-ex.v-paused{opacity:1}
+.v-ex.v-paused .v-av2 img{filter:grayscale(1);opacity:.6}
+.v-ex.v-paused b,.v-ex.v-paused .v-txt span{color:var(--mut)}
+.v-ex.v-paused .v-go{background:#FCE9E4;color:var(--coral)}
+.v-sheet img{filter:grayscale(1)}
+.v-sheet h2{color:var(--ink)}
+
+.v-team a[data-call=mamadou] .v-ic{color:var(--coral)}
+
+/* écrans d'entrée aux couleurs de la marque (fond violet comme la couverture du Branding Advanced et le hero du site) */
+.v-brand{background:var(--violet);color:#fff}
+.v-brand .v-logopill{align-self:flex-start;background:#fff;border-radius:14px;padding:8px 12px;margin:20px 0 88px;display:inline-flex}
+.v-brand .v-logopill .v-logo{margin:0;height:26px}
+.v-brand .v-in{background:#fff;border-color:transparent;color:var(--ink)}
+.v-brand .v-btn.v-pri{background:var(--lav);border-color:var(--lav);color:#fff}
+.v-brand .v-link{color:var(--c5)}
+.v-brand .v-ib.v-nb{color:#fff}
+.v-brand .v-pad button{color:#fff}
+.v-brand .v-pad button:active{background:rgba(255,255,255,.12)}
+.v-brand .v-dots i{background:rgba(255,255,255,.25)}
+.v-brand .v-dots i.v-on{background:#fff}
+.v-brand .v-pin .v-av{border:3px solid rgba(255,255,255,.2)}
+.v-brand .v-okic{background:rgba(255,255,255,.14);color:#fff}
+.v-brand .v-mail{color:var(--c5)}
+.v-brand .v-m-login,.v-brand .v-m-oubli,.v-brand .v-m-pin{color:var(--lav)}
+.v-brand .v-toast{background:#fff;color:var(--ink)}
+.v-brand .v-top{background:transparent}
+/* favori : l'astérisque reste derrière, sans toucher le bouton d'appel */
+.v-m-fav{width:120px;height:120px;right:auto;left:44%;top:auto;bottom:-56px;opacity:.35}
+
+/* favori = étoile dans la liste */
+.v-ex b .v-st{display:inline-flex;vertical-align:-2px;margin-left:6px;color:var(--ast)}
+.v-ex b .v-st .v-ic{width:15px;height:15px;fill:var(--ast)}
+/* allers-retours : transitions entre écrans (navigateurs récents), glissement doux */
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:v-out .18s ease-in both}
+::view-transition-new(root){animation:v-enter .22s ease-out both}
+@keyframes v-out{to{opacity:0;transform:translateX(-12px)}}
+@keyframes v-enter{from{opacity:0;transform:translateX(16px)}}
+
+/* sous-titres plus présents (retour 23) */
+.v-bg{height:44%}
+.v-sub{display:flex;flex-direction:column;gap:10px;min-height:150px;justify-content:flex-end;font-size:20px;line-height:1.35;margin:0 2px 16px;text-align:left}
+.v-sub .v-l{display:block}
+.v-sub .v-u{color:var(--c5)}
+.v-sub .v-old{font-size:16px;opacity:.55}
+.v-thk{margin-bottom:6px}
+
+/* l'Expert dans un cercle (par défaut) ou un carré (?forme=carre) pendant l'appel */
+.v-dark{background:radial-gradient(90% 50% at 50% 26%,#3a2380 0%,var(--night) 70%)}
+.v-bg{position:absolute;inset:auto;left:50%;top:150px;right:auto;bottom:auto;width:220px;height:220px;transform:translateX(-50%);border-radius:50%;background-size:cover;background-position:50% 18%;
+  box-shadow:0 0 0 6px rgba(141,104,250,.18),0 20px 60px rgba(0,0,0,.4)}
+.v-bg::after{display:none}
+.v-carre .v-bg{border-radius:36px}
+.v-think{border-radius:inherit;inset:-14px;background:none}
+.v-think::before{inset:0;border-radius:inherit;-webkit-mask:none;mask:none;background:conic-gradient(from 0deg,transparent 0 55%,#9DB3FF 80%,#fff 88%,transparent 100%);
+  padding:5px;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.v-think.v-on{animation:none}
+.v-s-parle-on .v-bg{box-shadow:0 0 0 6px rgba(141,104,250,.35),0 0 0 18px rgba(141,104,250,.12),0 20px 60px rgba(0,0,0,.4)}
+.v-ctx{margin-top:10px}
+.v-spacer{min-height:270px}

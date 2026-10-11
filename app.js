@@ -83,22 +83,24 @@ if(page==='verrouille'&&location.hash==='#livrable'){$('#v-nliv').hidden=false;$
 if(page==='verrouille'){var t1=192;setInterval(function(){$('#v-lt').textContent=fmt(++t1)},1000)}
 
 if(page==='appel'){
-  $('#v-bg').style.backgroundImage='url('+img(slug)+')';
+  $('#v-bg').style.backgroundImage='url('+img(slug)+')';if(Q.get('forme')==='carre')$('#v-ph').classList.add('v-carre');
   $('#v-nom').textContent=E.n;$('#v-thk-n').textContent=E.n;$('#v-end').href='fin.html?e='+slug;
   $('#v-fail-h').textContent=E.n+' injoignable';
   var S=E.s,sec=0,timer=setInterval(function(){$('#v-time').textContent=fmt(++sec)},1000);
   var wave=$('#v-wave'),sub=$('#v-sub'),longue=false,finir=false;
-  function state(k){['parle','ecoute','reflechit'].forEach(function(c){wave.classList.remove('v-s-'+c)});wave.classList.add('v-s-'+k);var th=k==='reflechit';$('#v-think').classList.toggle('v-on',th);$('#v-thk').hidden=!th}
-  function say(who,t){sub.textContent=t;sub.classList.toggle('v-u',who==='u')}
+  function state(k){document.body.classList.toggle('v-s-parle-on',k==='parle');['parle','ecoute','reflechit'].forEach(function(c){wave.classList.remove('v-s-'+c)});wave.classList.add('v-s-'+k);var th=k==='reflechit';$('#v-think').classList.toggle('v-on',th);$('#v-thk').hidden=!th}
+  var hist=[];
+  function say(who,t){if(!t){return}hist.push([who,t]);hist=hist.slice(-3);
+    sub.innerHTML=hist.map(function(h,k){return '<span class="v-l'+(h[0]==='u'?' v-u':'')+(k<hist.length-1?' v-old':'')+'">'+h[1]+'</span>'}).join('')}
   function tool(t){$('#v-tool').hidden=!t;if(t)$('#v-tool-t').textContent=t}
   var steps=[
-    function(){state('parle');say('e',S[0]);tool('');$('#v-task').hidden=true},
+    function(){hist=[];sub.innerHTML='';state('parle');say('e',S[0]);tool('');$('#v-task').hidden=true},
     function(){state('ecoute');say('u',S[1])},
-    function(){state('reflechit');say('e','');tool(S[2])},
+    function(){state('reflechit');tool(S[2])},
     function(){tool('');state('parle');say('e',S[3]);$('#v-ctx').style.opacity=0},
     function(){state('ecoute');say('u',S[4])},
     function(){state('parle');say('e',S[6]);$('#v-task').hidden=false;$('#v-task-t').textContent=S[5]},
-    function(){state('ecoute');say('e','')}
+    function(){state('ecoute')}
   ];
   var i=-1,auto;
   function go(n){i=n;for(var k=0;k<=n;k++)steps[k]()}
@@ -132,7 +134,6 @@ function fill(){
   $$('#v-res li').forEach(function(li,k){li.textContent=E.s[7][k]});
   $$('#v-dec li').forEach(function(li,k){li.textContent=E.s[8][k]});
   $$('#v-next li').forEach(function(li,k){li.textContent=E.s[9][k]});
-  $('#v-cr').addEventListener('click',function(){toast('Ouvre le compte rendu dans le topic de '+E.n+' sur Telegram.')});
   $('#v-tk').textContent=E.s[5];
   $('#v-recall').href='appel.html?e='+slug;$('#v-recall span').textContent='Rappeler '+E.n;
 }
@@ -165,4 +166,8 @@ if(page==='historique'){
 $$('.v-seg:not(.v-per)').forEach(function(g){$$('button',g).forEach(function(b){b.addEventListener('click',function(){
   $$('button',g).forEach(function(x){x.classList.toggle('v-on',x===b)});toast(b.textContent+', enregistré.')})})});
 $$('[data-tog]').forEach(function(r){r.addEventListener('click',function(){var t=$('.v-tog',r);var on=t.classList.toggle('v-on');toast($('b',r).textContent+(on?' activé.':' désactivé.'))})});
+/* allers-retours : le retour système suit la hiérarchie de l'app */
+var PARENT={pin:'index.html',oubli:'index.html',detail:'historique.html',fin:'experts.html',historique:'experts.html',reglages:'experts.html'};
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){if($('#v-ph').classList.contains('v-open')){$('#v-ph').classList.remove('v-open');return}
+  var sh=$('.v-sheet-bg');if(sh){sh.remove();return} if(PARENT[page])location.href=PARENT[page]}});
 })();
