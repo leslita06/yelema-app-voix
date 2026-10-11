@@ -238,3 +238,52 @@ a{color:inherit;text-decoration:none}
 .v-bg{top:84px;height:58%;background-position:52% 10%}
 .v-bg::after{background:linear-gradient(180deg,var(--night) 0%,rgba(20,14,44,0) 16%,rgba(20,14,44,0) 56%,var(--night) 100%)}
 .v-auth .v-logo{margin:20px 0 88px}
+.v-fleur{position:absolute;right:-56px;bottom:-40px;width:210px;opacity:.9;pointer-events:none;z-index:0}
+.v-auth{position:relative;z-index:1}
+
+/* recherche (grande équipe) */
+.v-search{display:flex;align-items:center;gap:10px;height:48px;border-radius:999px;border:1px solid var(--line);padding:0 16px;margin:0 0 8px;color:var(--mut)}
+.v-search .v-ic{width:18px;height:18px}
+.v-search input{flex:1;border:0;outline:none;font-size:15.5px;background:transparent;color:var(--ink);min-width:0}
+.v-top{position:relative;z-index:2;background:#fff}
+/* mot de passe oublié */
+.v-okic{width:56px;height:56px;border-radius:50%;background:var(--pale);color:var(--violet);display:flex;align-items:center;justify-content:center;margin:8px 0 18px}
+.v-mail{color:var(--mut);margin:-14px 0 22px}
+/* l'Experte réfléchit : halo qui balaie la photo + libellé animé */
+.v-think{position:absolute;inset:0;z-index:1;opacity:0;transition:opacity .4s;pointer-events:none;
+  background:radial-gradient(60% 45% at 50% 42%,rgba(141,104,250,.0) 40%,rgba(141,104,250,.55) 100%)}
+.v-think::before{content:"";position:absolute;inset:-20%;background:conic-gradient(from 0deg,transparent 0 70%,rgba(197,196,255,.55) 85%,transparent 100%);animation:v-spin 2.4s linear infinite;mix-blend-mode:screen;
+  -webkit-mask:radial-gradient(closest-side,transparent 62%,#000 64%,#000 72%,transparent 74%);mask:radial-gradient(closest-side,transparent 62%,#000 64%,#000 72%,transparent 74%)}
+.v-think.v-on{opacity:1;animation:v-pulse 1.8s ease-in-out infinite}
+@keyframes v-spin{to{transform:rotate(360deg)}}
+@keyframes v-pulse{50%{opacity:.6}}
+.v-thk{align-self:center;margin:0 0 12px;font-family:var(--fh);font-weight:600;font-size:20px;
+  background:linear-gradient(90deg,#fff 0%,var(--c5) 40%,#fff 60%,var(--c5) 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:v-shim 1.6s linear infinite}
+@keyframes v-shim{to{background-position:-200% 0}}
+.v-bg::after{z-index:2}
+
+/* motifs de la charte, un par écran */
+.v-mot{position:absolute;pointer-events:none;z-index:0;opacity:.9}
+.v-mot.v-br{right:-56px;bottom:-40px;width:210px}
+.v-mot.v-tr{right:-30px;top:-24px;width:110px;opacity:.85}
+.v-hello{position:relative}
+.v-hello .v-mot.v-tr{top:-6px;right:-44px;width:96px}
+.v-scroll{position:relative}
+.v-endh,.v-blk,.v-acts,.v-pin,.v-auth{position:relative;z-index:1}
+.v-fleur{display:none}
+.v-chk li::before{border-radius:3px;background:transparent;border:1.6px solid var(--lav);width:8px;height:8px;top:7px}
+.v-per{margin:0 0 4px}
+.v-per button{height:38px;font-size:14px}
+.v-chips{padding-top:8px}
+.v-acts .v-btn img{width:22px;height:22px}
+/* réflexion plus visible (retour Leslie 3) */
+.v-bg{height:52%}
+.v-think{background:radial-gradient(70% 55% at 50% 45%,rgba(20,14,44,.25) 30%,rgba(141,104,250,.75) 100%)}
+.v-think::before{background:conic-gradient(from 0deg,transparent 0 55%,rgba(197,196,255,.95) 80%,#fff 88%,transparent 100%);-webkit-mask:radial-gradient(closest-side,transparent 58%,#000 60%,#000 70%,transparent 72%);mask:radial-gradient(closest-side,transparent 58%,#000 60%,#000 70%,transparent 72%)}
+.v-thk{background:none;color:var(--c5);-webkit-background-clip:border-box;background-clip:border-box;animation:v-blink 1.4s ease-in-out infinite}
+@keyframes v-blink{50%{opacity:.45}}
+.v-mot.v-br{width:180px;right:-60px;bottom:-50px}
+.v-pin .v-mot,.v-ph > .v-mot.v-br{opacity:.75}
+.v-hello .v-mot.v-tr{width:80px;right:-40px;opacity:.7}
+.v-per button{min-height:44px;height:44px}
+.v-ctx{background:rgba(255,255,255,.18);color:#fff;font-weight:600}.v-ctx .v-ic{width:16px;height:16px}
