@@ -1,141 +1,140 @@
-/* Yelema Voix, prototype : navigation, code PIN, appel simulé, historique, réglages */
+/* Yelema Voix v2, prototype : menu, code, appel simulé (avance au toucher), historique, réglages */
 (function(){
 var $=function(s,r){return (r||document).querySelector(s)}, $$=function(s,r){return [].slice.call((r||document).querySelectorAll(s))};
-var page=document.body.getAttribute('data-page');
-var Q=new URLSearchParams(location.search);
-
-function toast(t){var el=$('#v-toast');if(!el)return;el.textContent=t;el.classList.remove('v-show');void el.offsetWidth;el.classList.add('v-show');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('v-show')},2600)}
-document.addEventListener('click',function(e){var b=e.target.closest('[data-toast]');if(b){e.preventDefault();toast(b.getAttribute('data-toast'))}});
-
-/* Experts : prénom, métier, féminin, scénario de démo (accueil, question, outil, réponse, demande, tâche, confirmation, résumé) */
-var X={
- djeneba:{n:'Djénéba',j:'Chief of Staff',f:1,
-  s:['Bonjour Aïcha, c’est Djénéba. Je vous écoute.','Fais-moi le point du jour.','Je regarde votre agenda et les validations en attente…',
-     'Deux validations vous attendent, et Prosuma a décalé son rendez-vous à 15 h. Voulez-vous la note du codir avant midi ?','Oui, prépare-la en Word.',
-     ['Note du comité de direction, en Word','Prête dans un quart d’heure environ.'],'C’est lancé, je vous l’envoie avant midi.',
-     ['Deux validations en attente : devis transport et visuel Sossa.','Rendez-vous Prosuma décalé à 15 h.','Note du codir demandée pour midi.']]},
- fatima:{n:'Fatima',j:'Marketing et contenu',f:1,
-  s:['Bonjour Aïcha, c’est Fatima. Je vous écoute.','Tu peux comparer nos prix de jus avec ceux de Carrefour ?','Je cherche les prix relevés hier dans vos fichiers…',
-     'Sossa reste moins cher sur le litre, mais plus cher sur le 33 cl. Voulez-vous la comparaison complète en PDF ?','Oui, en PDF.',
-     ['Comparaison des prix, en PDF','Prête dans une dizaine de minutes.'],'C’est lancé. Je vous l’envoie dans une dizaine de minutes.',
-     ['Prix des jus Sossa comparés à ceux de Carrefour et Prosuma, relevés d’hier.','Sossa reste moins cher sur le litre, plus cher sur le format 33 cl.','À trancher lundi : baisse du 33 cl pendant la promo de rentrée.']]},
- koffi:{n:'Koffi',j:'Design et marque',f:0,
-  s:['Bonjour Aïcha, c’est Koffi. Je vous écoute.','Où en est le kakémono du salon Agro ?','J’ouvre la maquette dans Figma…',
-     'J’ai deux pistes, une verte et une orange. La verte respecte mieux la charte. Je vous envoie les deux ?','Oui, envoie les deux.',
-     ['Kakémono du salon Agro, deux pistes en PDF','Prêt dans cinq minutes.'],'C’est parti, vous les aurez dans cinq minutes.',
-     ['Kakémono du salon Agro : deux pistes prêtes.','La piste verte colle mieux à la charte.','Les deux pistes envoyées pour choix.']]},
- kouassi:{n:'Kouassi',j:'Ventes',f:0,
-  s:['Bonjour Aïcha, c’est Kouassi. Je vous écoute.','Prosuma a répondu pour le devis ?','Je regarde le devis dans HubSpot…',
-     'Pas encore, ça fait six jours. Je propose une relance avec 5 % de remise sur le volume. Je la prépare ?','Oui, prépare le mail.',
-     ['Relance du devis Prosuma, mail à valider','Prêt dans quelques minutes.'],'C’est lancé, vous le validez avant que je l’envoie.',
-     ['Devis Prosuma sans réponse depuis six jours.','Relance proposée avec 5 % de remise sur le volume.','Mail préparé, à valider avant envoi.']]},
- awa:{n:'Awa',j:'Service client',f:1,
-  s:['Bonjour Aïcha, c’est Awa. Je vous écoute.','Il y a des réclamations ce matin ?','Je lis les messages clients du matin…',
-     'Trois réclamations, toutes sur des retards de livraison à Yopougon. Je prépare les réponses ?','Oui, prépare-les.',
-     ['Réponses aux trois réclamations, à valider','Prêtes dans quelques minutes.'],'C’est lancé, vous les validez avant envoi.',
-     ['Trois réclamations ce matin, toutes sur Yopougon.','Cause : retards de livraison du transporteur.','Réponses préparées, à valider.']]},
- mamadou:{n:'Mamadou',j:'Finance',f:0,
-  s:['Bonjour Aïcha, c’est Mamadou. Je vous écoute.','Comment se présente la trésorerie ?','J’ouvre la trésorerie à 13 semaines…',
-     'Un creux est attendu fin novembre. Trois clients ont des factures en retard. Je prépare la liste des relances ?','Oui, en Excel.',
-     ['Relances clients, en Excel','Prête dans dix minutes.'],'C’est lancé, vous l’aurez dans dix minutes.',
-     ['Creux de trésorerie attendu fin novembre.','Trois clients avec des factures en retard.','Liste des relances demandée en Excel.']]}
-};
-var slug=X[Q.get('e')]?Q.get('e'):'fatima', E=X[slug];
+var page=document.body.getAttribute('data-page'), Q=new URLSearchParams(location.search);
+function toast(t){var el=$('#v-toast');if(!el)return;el.textContent=t;el.classList.remove('v-show');void el.offsetWidth;el.classList.add('v-show');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('v-show')},2400)}
+function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
 function img(s){return 'img/'+s+'.jpg'}
 
-/* Connexion */
+/* Experts : prénom, féminin, en pause, scénario (accueil, question, outil, réponse, demande, tâche, confirmation, résumé) */
+var X={
+ djeneba:{n:'Djénéba',f:1,s:['Bonjour Aïcha, je vous écoute.','Fais-moi le point du jour.','Votre agenda',
+   'Deux validations vous attendent, et Lagune Distribution a décalé son rendez-vous à 15 h. Je prépare la note du codir ?','Oui, en Word.',
+   'Note du comité de direction','C’est lancé, vous l’aurez avant midi.',
+   ['Deux validations en attente : devis transport et visuel Sossa.','Rendez-vous Lagune Distribution décalé à 15 h.','Note du codir demandée pour midi.']]},
+ fatima:{n:'Fatima',f:1,s:['Bonjour Aïcha, je vous écoute.','Tu peux comparer nos prix de jus avec ceux d’Hyper Lagune ?','Relevés de prix d’hier',
+   'Sossa est moins cher sur le litre, mais plus cher sur le 33 cl. Je vous fais la comparaison en PDF ?','Oui, en PDF.',
+   'Comparaison des prix, PDF','C’est lancé, vous l’aurez dans dix minutes.',
+   ['Prix Sossa comparés à Hyper Lagune et Prix Doux.','Moins cher sur le litre, plus cher sur le 33 cl.','À trancher lundi : baisse du 33 cl pendant la promo.']]},
+ koffi:{n:'Koffi',f:0,s:['Bonjour Aïcha, je vous écoute.','Où en est le kakémono du salon Agro ?','Figma',
+   'J’ai deux pistes, une verte et une orange. La verte colle mieux à la charte. Je vous envoie les deux ?','Oui, envoie les deux.',
+   'Kakémono salon Agro, deux pistes','C’est parti, vous les aurez dans cinq minutes.',
+   ['Kakémono du salon Agro : deux pistes prêtes.','La verte colle mieux à la charte.','Les deux pistes envoyées pour choix.']]},
+ kouassi:{n:'Kouassi',f:0,s:['Bonjour Aïcha, je vous écoute.','Lagune Distribution a répondu pour le devis ?','HubSpot',
+   'Pas encore, ça fait six jours. Je propose une relance avec 5 % de remise sur le volume. Je la prépare ?','Oui, prépare le mail.',
+   'Relance du devis, mail à valider','C’est prêt dans quelques minutes, vous validez avant envoi.',
+   ['Devis Lagune Distribution sans réponse depuis six jours.','Relance proposée avec 5 % de remise sur le volume.','Mail préparé, à valider avant envoi.']]},
+ awa:{n:'Awa',f:1,s:['Bonjour Aïcha, je vous écoute.','Il y a des réclamations ce matin ?','Messages clients du matin',
+   'Trois réclamations, toutes sur des retards de livraison à Yopougon. Je prépare les réponses ?','Oui, prépare-les.',
+   'Réponses aux trois réclamations','C’est lancé, vous les validez avant envoi.',
+   ['Trois réclamations ce matin, toutes à Yopougon.','Cause : retards du transporteur.','Réponses préparées, à valider.']]},
+ mamadou:{n:'Mamadou',f:0,off:1,s:['Bonjour Aïcha, je vous écoute.','Comment se présente la trésorerie ?','Trésorerie à 13 semaines',
+   'Un creux est attendu fin novembre. Trois clients ont des factures en retard. Je prépare les relances ?','Oui, en Excel.',
+   'Relances clients, Excel','C’est lancé, vous l’aurez dans dix minutes.',
+   ['Creux de trésorerie attendu fin novembre.','Trois clients avec des factures en retard.','Relances demandées en Excel.']]}
+};
+var slug=X[Q.get('e')]?Q.get('e'):'fatima', E=X[slug];
+
+document.addEventListener('click',function(e){
+  var t=e.target.closest('[data-toast]');if(t){e.preventDefault();toast(t.getAttribute('data-toast'));return}
+  if(e.target.closest('[data-menu]')){$('#v-ph').classList.add('v-open');return}
+  if(e.target.closest('[data-close]')){$('#v-ph').classList.remove('v-open');return}
+  var c=e.target.closest('[data-call]');
+  if(c){e.preventDefault();var s=c.getAttribute('data-call');
+    if(X[s].off){$('#v-ph').classList.remove('v-open');sheet(s);return}
+    location.href='appel.html?e='+s;return}
+  var o=e.target.closest('[data-open]');
+  if(o){toast(o.getAttribute('data-open')==='tg'?'Ouvre le topic de '+E.n+' dans Telegram.':'Ouvre les Livrables de '+E.n+' sur la plateforme.')}
+});
+function sheet(s){
+  var bg=document.createElement('div');bg.className='v-sheet-bg';
+  bg.innerHTML='<div class="v-sheet" role="dialog"><img src="'+img(s)+'" alt=""><h2 class="v-h">'+X[s].n+' est en pause</h2><p>Mis en pause par votre administrateur</p><button class="v-btn v-pri" type="button">OK</button></div>';
+  bg.addEventListener('click',function(e){if(e.target===bg||e.target.closest('button'))bg.remove()});
+  $('#v-ph').appendChild(bg);
+}
+
 if(page==='index'){$('#v-login').addEventListener('submit',function(e){e.preventDefault();location.href='pin.html'})}
 
-/* Code PIN */
 if(page==='pin'){
   var code='',dots=$$('#v-dots i');
   function draw(){dots.forEach(function(d,i){d.classList.toggle('v-on',i<code.length)})}
   $$('.v-pad button').forEach(function(b){b.addEventListener('click',function(){
     var k=b.getAttribute('data-k');
     if(k==='del'){code=code.slice(0,-1);draw();return}
-    if(k==='bio'){toast('Empreinte reconnue.');setTimeout(function(){location.href='experts.html'},700);return}
+    if(k==='bio'){dots.forEach(function(d){d.classList.add('v-on')});setTimeout(function(){location.href='experts.html'},400);return}
     if(code.length<4){code+=k;draw()}
-    if(code.length===4){setTimeout(function(){location.href='experts.html'},250)}
+    if(code.length===4)setTimeout(function(){location.href='experts.html'},250);
   })});
 }
 
-/* Mes Experts : bandeau d'appel en cours, réseau faible */
 if(page==='experts'){
-  var h=location.hash;
-  if(h==='#encours'){var lv=$('#v-live');lv.hidden=false;var t0=192;setInterval(function(){t0++;$('#v-live-t').textContent=fmt(t0)},1000)}
-  if(h==='#reseau'){$('#v-net').hidden=false}
+  if(location.hash==='#encours'){$('#v-live').hidden=false;var t0=192;setInterval(function(){$('#v-live-t').textContent=fmt(++t0)},1000)}
+  if(location.hash==='#reseau'){$('#v-net').hidden=false}
+  if(location.hash==='#menu'){$('#v-ph').classList.add('v-open')}
+  if(location.hash==='#pause'){sheet('mamadou')}
 }
-function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
 
-/* Appel */
+if(page==='verrouille'){var t1=192;setInterval(function(){$('#v-lt').textContent=fmt(++t1)},1000)}
+
 if(page==='appel'){
   $('#v-bg').style.backgroundImage='url('+img(slug)+')';
-  $('#v-nom').textContent=E.n;$('#v-job').textContent=E.j;
-  $('#v-end').href='fin.html?e='+slug;
-  $('#v-fail-h').textContent='Impossible de joindre '+E.n;
-  $('#v-fail p').textContent='Votre connexion est trop faible pour un appel. Réessayez dans un endroit mieux couvert, ou écrivez-lui : '+(E.f?'elle':'il')+' répond aussi par écrit.';
-  $('#v-write-t').textContent='Écrire à '+E.n+' sur Telegram';
-  var S=E.s, subs=$('#v-subs'), sec=0, timer=setInterval(function(){sec++;$('#v-time').textContent=fmt(sec)},1000);
-  function state(k){
-    var st=$('#v-state');['parle','ecoute','reflechit'].forEach(function(c){st.classList.remove('v-s-'+c)});st.classList.add('v-s-'+k);
-    var lab={parle:E.n+' parle',ecoute:E.n+' écoute',reflechit:E.n+' réfléchit'}[k];
-    if(k==='ecoute'&&finir)lab=E.n+' vous laisse finir';
-    if(k==='reflechit'&&longue)lab=E.n+' prend le temps de réfléchir';
-    $('#v-state-t').textContent=lab;
-  }
-  function say(who,t){var p=document.createElement('p');if(who==='u')p.className='v-u';p.innerHTML='<b>'+(who==='u'?'Vous':E.n)+'</b>'+t;subs.appendChild(p);while(subs.children.length>3)subs.removeChild(subs.firstChild)}
+  $('#v-nom').textContent=E.n;$('#v-end').href='fin.html?e='+slug;
+  $('#v-fail-h').textContent=E.n+' injoignable';
+  var S=E.s,sec=0,timer=setInterval(function(){$('#v-time').textContent=fmt(++sec)},1000);
+  var wave=$('#v-wave'),sub=$('#v-sub'),longue=false,finir=false;
+  function state(k){['parle','ecoute','reflechit'].forEach(function(c){wave.classList.remove('v-s-'+c)});wave.classList.add('v-s-'+k)}
+  function say(who,t){sub.textContent=t;sub.classList.toggle('v-u',who==='u')}
   function tool(t){$('#v-tool').hidden=!t;if(t)$('#v-tool-t').textContent=t}
-  function task(){$('#v-task').hidden=false;$('#v-task-t').textContent=S[5][0];$('#v-task-s').textContent='Tâche lancée. '+S[5][1]}
-  var steps={
-    decroche:function(){state('parle');say('e',S[0])},
-    ecoute:function(){steps.decroche();state('ecoute');say('u',S[1])},
-    recherche:function(){steps.ecoute();state('reflechit');tool(S[2])},
-    reponse:function(){steps.recherche();tool('');state('parle');say('e',S[3])},
-    tache:function(){steps.reponse();say('u',S[4]);task();state('parle');say('e',S[6])}
-  };
-  var longue=false, finir=false;
+  var steps=[
+    function(){state('parle');say('e',S[0]);tool('');$('#v-task').hidden=true},
+    function(){state('ecoute');say('u',S[1])},
+    function(){state('reflechit');say('e','');tool(S[2])},
+    function(){tool('');state('parle');say('e',S[3]);$('#v-ctx').style.opacity=0},
+    function(){state('ecoute');say('u',S[4])},
+    function(){state('parle');say('e',S[6]);$('#v-task').hidden=false;$('#v-task-t').textContent=S[5]},
+    function(){state('ecoute');say('e','')}
+  ];
+  var i=-1,auto;
+  function go(n){i=n;for(var k=0;k<=n;k++)steps[k]()}
+  function next(){if(i<steps.length-1)go(i+1)}
+  function play(){clearInterval(auto);auto=setInterval(function(){if(i>=steps.length-1)clearInterval(auto);else next()},2800)}
+  $('#v-bg').addEventListener('click',function(){play();next()});
   $('#v-long').addEventListener('click',function(){longue=!longue;this.classList.toggle('v-on',longue);this.setAttribute('aria-pressed',longue);
-    this.querySelector('span').textContent=longue?'Réflexion longue':'Réfléchis plus';
-    toast(longue?E.n+' prendra plus de temps pour une réponse plus fouillée, et vous préviendra.':'Retour aux réponses rapides.')});
-  var fb=$('#v-finir');
-  function finOn(){finir=true;fb.classList.add('v-on');fb.setAttribute('aria-pressed','true');state('ecoute')}
-  function finOff(){if(!finir)return;finir=false;fb.classList.remove('v-on');fb.setAttribute('aria-pressed','false');state('ecoute')}
-  fb.addEventListener('pointerdown',function(e){e.preventDefault();finOn()});
-  ['pointerup','pointerleave','pointercancel'].forEach(function(ev){fb.addEventListener(ev,finOff)});
-  fb.addEventListener('click',function(){if(!finir){toast('Maintenez le bouton appuyé tant que vous parlez : '+E.n+' attendra.')}});
-  $('#v-mic').addEventListener('click',function(){var on=this.classList.toggle('v-on');$('.v-ml',this).textContent=on?'Micro coupé':'Micro';
-    $('.v-m1',this).hidden=on;$('.v-m2',this).hidden=!on;toast(on?E.n+' ne vous entend plus.':E.n+' vous entend à nouveau.')});
-  $('#v-cc').addEventListener('click',function(){var on=this.classList.toggle('v-on');subs.hidden=!on});
-  $('#v-hp').addEventListener('click',function(){var on=this.classList.toggle('v-on');toast(on?'Haut-parleur activé.':'Son dans l’écouteur.')});
-  $('#v-retry').addEventListener('click',function(){$('#v-fail').hidden=true;run()});
+    toast(longue?E.n+' prendra le temps de chercher.':'Réponses rapides.')});
+  $('#v-finir').addEventListener('click',function(){finir=!finir;this.classList.toggle('v-on',finir);this.setAttribute('aria-pressed',finir);
+    if(finir){clearInterval(auto);state('ecoute');say('u','… et pour le 33 cl, regarde aussi ce que fait Prix Doux, parce que')}
+    toast(finir?E.n+' attend que vous ayez fini.':E.n+' peut reprendre la parole.')});
+  $('#v-mic').addEventListener('click',function(){var on=this.classList.toggle('v-on');$('.v-m1',this).hidden=on;$('.v-m2',this).hidden=!on;toast(on?'Micro coupé.':'Micro rétabli.')});
+  $('#v-cc').addEventListener('click',function(){var on=this.classList.toggle('v-on');sub.style.visibility=on?'':'hidden'});
+  $('#v-hp').addEventListener('click',function(){var on=this.classList.toggle('v-on');toast(on?'Haut-parleur.':'Écouteur.')});
+  $('#v-retry').addEventListener('click',function(){$('#v-fail').hidden=true;clearInterval(timer);sec=0;timer=setInterval(function(){$('#v-time').textContent=fmt(++sec)},1000);go(0);play()});
   $('#v-write').addEventListener('click',function(){toast('Ouvre le topic de '+E.n+' dans Telegram.')});
-
-  var h=location.hash.slice(1);
-  function run(){
-    subs.innerHTML='';tool('');$('#v-task').hidden=true;
-    var seq=[['decroche',0],['ecoute',2600],['recherche',5200],['reponse',8000],['tache',11500]];
-    seq.forEach(function(x){setTimeout(function(){subs.innerHTML='';tool('');$('#v-task').hidden=true;steps[x[0]]()},x[1])});
-    setTimeout(function(){state('ecoute')},15500);
-  }
-  if(h==='injoignable'){steps.decroche();$('#v-fail').hidden=false;clearInterval(timer)}
-  else if(h==='finir'){steps.ecoute();sec=74;finOn();say('u','… et pour le 33 cl, je voudrais aussi qu’on regarde ce que fait Prosuma, parce que');}
-  else if(h==='longue'){steps.recherche();sec=96;$('#v-long').click();state('reflechit')}
-  else if(steps[h]){steps[h]();sec={decroche:1,ecoute:9,recherche:21,reponse:38,tache:62}[h]}
-  else run();
+  var h=location.hash.slice(1), at={decroche:0,ecoute:1,recherche:2,reponse:3,tache:5}[h];
+  if(h==='injoignable'){go(0);$('#v-fail').hidden=false;clearInterval(timer)}
+  else if(h==='finir'){go(3);sec=74;$('#v-finir').click()}
+  else if(h==='longue'){go(2);sec=96;$('#v-long').click()}
+  else if(at!==undefined){go(at);sec=[1,9,21,38,0,62][at]}
+  else{go(0);play()}
   $('#v-time').textContent=fmt(sec);
-  $('.v-min').href='experts.html#encours';
 }
 
-/* Fin d'appel */
-if(page==='fin'){
-  var S2=E.s;$('#v-av').src=img(slug);$('#v-sub').textContent=E.n+', 6 min 12 s';
-  var li=$$('.v-card ul li');S2[7].forEach(function(t,i){if(li[i])li[i].textContent=t});
-  $('.v-task b').textContent=S2[5][0];$('.v-task small').textContent='En préparation. '+S2[5][1];
-  $('.v-note span').textContent='Ce résumé est aussi dans le topic Telegram de '+E.n+' et dans '+'son'+' espace sur la plateforme Yelema. '+(E.f?'Elle':'Il')+' s’en souviendra au prochain appel.';
+function fill(){
+  $('#v-av').src=img(slug);$('#v-n').textContent=E.n;
+  $$('#v-res li').forEach(function(li,k){li.textContent=E.s[7][k]});
+  $('#v-tk').textContent=E.s[5];
   $('#v-recall').href='appel.html?e='+slug;$('#v-recall span').textContent='Rappeler '+E.n;
 }
+if(page==='fin'){fill()}
+if(page==='detail'){
+  var D={djeneba:['Aujourd’hui, 08:12, 3 min',0],fatima:Q.get('h')==='1018'?['Aujourd’hui, 10:18, 6 min',1]:['Hier, 17:40, 4 min',2],
+    koffi:['Vendredi, 16:30, 5 min',2],kouassi:['Hier, 11:05, 8 min',2],awa:['Jeudi, 09:40, 3 min',2],mamadou:['Vendredi, 09:10, 7 min',2]}[slug];
+  fill();$('#v-d').textContent=D[0];
+  if(slug==='fatima'&&D[1]===2){var r=['Posts de la semaine passés en revue.','Tout validé sauf le jeu concours de jeudi.','Jeu concours décalé à samedi si besoin.'];
+    $$('#v-res li').forEach(function(li,k){li.textContent=r[k]});$('#v-tk').textContent='Calendrier des posts, semaine du 12'}
+  if(D[1]===0)$('#v-tkb').hidden=true;
+  if(D[1]===1)$('#v-tks').innerHTML='<i></i>En préparation';
+}
 
-/* Historique : filtre par Expert */
 if(page==='historique'){
   $$('#v-chips button').forEach(function(b){b.addEventListener('click',function(){
     $$('#v-chips button').forEach(function(x){x.classList.toggle('v-on',x===b)});
@@ -146,25 +145,7 @@ if(page==='historique'){
   })});
 }
 
-/* Détail d'un appel passé */
-if(page==='detail'){
-  var D={djeneba:['Aujourd’hui, 08:12, 3 min',null],fatima:Q.get('h')==='1018'?['Aujourd’hui, 10:18, 6 min','wait']:['Hier, 17:40, 4 min','ok'],
-    koffi:['Vendredi 9 octobre, 16:30, 5 min','ok'],kouassi:['Hier, 11:05, 8 min','ok'],awa:['Jeudi 8 octobre, 09:40, 3 min','ok'],mamadou:['Vendredi 9 octobre, 09:10, 7 min','ok']}[slug];
-  if(!(slug==='fatima'&&Q.get('h')!=='1018')){
-    $('.v-endh img').src=img(slug);$('.v-endh h1').textContent=E.n;
-    var lis=$$('.v-card ul li');E.s[7].forEach(function(t,i){if(lis[i])lis[i].textContent=t});
-    var tb=$$('.v-card')[1];
-    if(!D[1]){tb.hidden=true}
-    else{$('.v-task b',tb).textContent=E.s[5][0];
-      $('.v-task small',tb).innerHTML=D[1]==='ok'?'<span class="v-pill v-ok">Livré</span>':'<span class="v-pill v-wait">En préparation</span>'}
-    $$('[data-toast]').forEach(function(b){b.setAttribute('data-toast',b.getAttribute('data-toast').replace(/Fatima/g,E.n))});
-    $('.v-acts a').href='appel.html?e='+slug;$('.v-acts span').textContent='Rappeler '+E.n;
-  }
-  $('.v-endh small').textContent=D[0];
-}
-
-/* Réglages : choix segmentés et interrupteurs */
 $$('.v-seg').forEach(function(g){$$('button',g).forEach(function(b){b.addEventListener('click',function(){
-  $$('button',g).forEach(function(x){x.classList.toggle('v-on',x===b)});toast(b.textContent+' : enregistré.')})})});
-$$('[data-tog]').forEach(function(r){r.addEventListener('click',function(){var t=$('.v-tog',r);var on=t.classList.toggle('v-on');toast((on?'Activé : ':'Désactivé : ')+$('b',r).textContent)})});
+  $$('button',g).forEach(function(x){x.classList.toggle('v-on',x===b)});toast(b.textContent+', enregistré.')})})});
+$$('[data-tog]').forEach(function(r){r.addEventListener('click',function(){var t=$('.v-tog',r);var on=t.classList.toggle('v-on');toast($('b',r).textContent+(on?' activé.':' désactivé.'))})});
 })();

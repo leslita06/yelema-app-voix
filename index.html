@@ -1,22 +1,18 @@
 <!doctype html><html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex"><meta name="theme-color" content="#ffffff">
-<title>Connexion | Yelema Voix</title>
+<title>Connexion | Yelema</title>
 <link rel="icon" href="img/yelema_y.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="app.css"></head>
-<body data-page="index"><div class="v-ph">
-<div class="v-sb"><span>10:24</span><span>▾ ▴ 4G ▮</span></div>
+<body data-page="index"><div class="v-ph" id="v-ph">
 
-<form class="v-auth" id="v-login" autocomplete="on">
+<form class="v-auth" id="v-login">
   <img class="v-logo" src="img/yelema_long.png" alt="Yelema">
-  <h1 class="v-h">Appelez vos Experts</h1>
-  <p class="v-sub">Connectez-vous avec votre compte Yelema.</p>
-  <label class="v-fld"><span>Adresse email</span><input class="v-in" type="email" value="aicha@unifood.ci" autocomplete="email" required></label>
-  <label class="v-fld"><span>Mot de passe</span><input class="v-in" type="password" value="demo-yelema" autocomplete="current-password" required></label>
-  <div class="v-grow"></div>
+  <h1 class="v-h">Connexion</h1>
+  <input class="v-in" type="email" value="aicha.diabate@unifood.info" aria-label="Adresse email" autocomplete="email" required>
+  <input class="v-in" type="password" value="demo-yelema" aria-label="Mot de passe" autocomplete="current-password" required>
   <button class="v-btn v-pri" type="submit">Se connecter</button>
-  <button class="v-link" type="button" data-toast="Un lien pour choisir un nouveau mot de passe part sur aicha@unifood.ci.">Mot de passe oublié ?</button>
-  <p class="v-help">Pas encore de compte ? Demandez à votre administrateur.</p>
+  <button class="v-link" type="button" data-toast="Lien envoyé sur votre adresse email.">Mot de passe oublié ?</button>
 </form><div class="v-toast" id="v-toast"></div></div><script src="app.js"></script></body></html>
