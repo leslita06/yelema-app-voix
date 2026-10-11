@@ -322,3 +322,16 @@ a{color:inherit;text-decoration:none}
 .v-pinned > img{width:62px;height:62px;border-radius:50%;object-fit:cover;object-position:50% 14%;border:2px solid #fff}
 .v-pinned i{position:absolute;right:-4px;bottom:-2px;width:24px;height:24px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center}
 .v-pinned i img{width:16px;height:16px}
+
+/* motifs officiels (Branding Advanced p. 29), dessinés en SVG, jamais coupés au point de perdre une barre */
+.v-mot{position:absolute;pointer-events:none;z-index:0;color:var(--lav);opacity:1}
+.v-m-login{width:200px;height:200px;right:-48px;bottom:-48px}
+.v-m-oubli{width:150px;height:150px;right:20px;bottom:36px;color:var(--c5)}
+.v-m-pin{width:64px;height:64px;right:22px;top:26px;color:var(--c5)}
+.v-m-fin{width:58px;height:58px;right:4px;top:4px;color:var(--c5)}
+.v-fav{overflow:hidden}
+.v-fav > *:not(.v-mot){position:relative;z-index:1}
+.v-m-fav{width:170px;height:170px;right:-34px;top:-30px;color:var(--c5);opacity:.7}
+.v-ctx .v-mot{position:static;width:14px;height:14px;color:#fff}
+.v-btn .v-mot{position:static;width:18px;height:18px;color:#fff}
+.v-callui{z-index:3}.v-bg{z-index:0}
